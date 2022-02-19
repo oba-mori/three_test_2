@@ -1,156 +1,143 @@
 <!--
-three.jsの練習2
+three.jsの練習1
 
 three.js
 
 
 参考
+https://www.kabuku.co.jp/developers/threearjs
 
 途中
+今のところURLのリンクだけは表示されるが、それ以外は真っ白
 
 -->
 
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>three.ar.js - テンプレテキスト</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, user-scalable=no,
+                                        minimum-scale=1.0, maximum-scale=1.0">
 
-<html>
-<head>
-	<meta charset="UTF-8"/>
-	<title>Hello Three.js!!</title>
-	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0, shrink-to-fit=no"/>
-	<meta name="apple-mobile-web-app-capable" content="yes"/>
-	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
-	<!-- CSS -->
-	<style>
-		body{width:100%; height:100%; padding:0; margin:0; overflow:hidden;}
-		canvas{position:absolute; top:0; left:0;}
-	</style>
-</head>
-<body>
-	<!-- Frameworks -->
-	<script src="./libs/three-js/three.js"></script>
-	<script src="./libs/three-js/VRControls.js"></script>
-	<script src="./libs/three-ar/three.ar.js"></script>
-	<!-- Main -->
-	<script src="./js/utility.js"></script>
-
-
-
-
-
-
-
-
-	<script>
-
-        console.log("Hello Three.js!!");
-        
-        const BOX_DISTANCE = 1.5;
-        const BOX_SIZE     = 0.25;
-        const BOX_QUANTITY = 12;
-        
-        let arDisplay, vrControls, arView;
-        
-        let scene, renderer, camera, canvas
-        
-        window.onload = function(){
-            console.log("onload!!");
-            startAR();
-        }
-        
-        function startAR(){
-            console.log("startAR!!");
-        
-            // ARDisplay
-            THREE.ARUtils.getARDisplay().then((display)=>{
-                if(display){
-                    // Supported
-                    arDisplay = display;
-                    initAR();
-                }else{
-                    // Unsupported
-                    THREE.ARUtils.displayUnsupportedMessage();
-                }
-            });
-        }
-        
-        function initAR(){
-            console.log("initAR!!");
-        
-            // Three.js(Scene)
-            scene = new THREE.Scene();
-        
-            // Three.js(Renderer)
-            renderer = new THREE.WebGLRenderer({alpha: true});
-            renderer.setPixelRatio(window.devicePixelRatio);
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.autoClear = false;
-            canvas = renderer.domElement;
-            document.body.appendChild(canvas);
-        
-            // Three.js(Camera)
-            camera = new THREE.ARPerspectiveCamera(
-                arDisplay, 60,
-                window.innerWidth / window.innerHeight,
-                arDisplay.depthNear, arDisplay.depthFar
-            );
-        
-            // ARView
-            arView = new THREE.ARView(arDisplay, renderer);
-        
-            // Controls
-            vrControls = new THREE.VRControls(camera);
-        
-            // Resize
-            window.addEventListener("resize", onWindowResize, false);
-            // Click
-            canvas.addEventListener("touchstart", setBoxes, false);
-        
-            // Update
-            update();
-        }
-        
-        function onWindowResize(){
-            camera.aspect = window.innerWidth / window.innerHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(window.innerWidth, window.innerHeight);
-        }
-        
-        function update(){
-            // Clear
-            renderer.clearColor();
-        
-            arView.render();
-            camera.updateProjectionMatrix();
-            vrControls.update();
-        
-            // Render
-            renderer.clearDepth();
-            renderer.render(scene, camera);
-        
-            // Update
-            arDisplay.requestAnimationFrame(update);
-        }
-        
-        function setBoxes(){
-            // Create some cubes around the origin point
-            for(let i = 0; i < BOX_QUANTITY; i++) {
-                let angle = Math.PI * 2 * (i / BOX_QUANTITY);
-                let geometry = new THREE.BoxGeometry(BOX_SIZE, BOX_SIZE, BOX_SIZE);
-                let material = new THREE.MeshNormalMaterial();
-                let cube = new THREE.Mesh(geometry, material);
-                let x = Math.cos(angle) * BOX_DISTANCE;
-                let y = camera.position.y - 0.25;
-                let z = Math.sin(angle) * BOX_DISTANCE;
-                cube.position.set(x, y, z);
-                scene.add(cube);
+        <style>
+            body {
+                font-family: monospace;
+                margin: 0;
+                overflow: hidden;
+                position: fixed;
+                width: 100%;
+                height: 100vh;
+                -webkit-user-select: none;
+                user-select: none;
             }
-        }
+
+            #info {
+                position: absolute;
+                left: 50%;
+                bottom: 0;
+                transform: translate(-50%, 0);
+                margin: 1em;
+                z-index: 10;
+                display: block;
+                line-height: 2em;
+                text-align: center;
+            }
+
+            #info * {
+                color: #fff;
+            }
+
+            .title {
+                background-color: rgba(40, 40, 40, 0.4);
+                padding: 0.4em 0.6em;
+                border-radius: 0.1em;
+            }
+
+            .links {
+                background-color: rgba(40, 40, 40, 0.6);
+                padding: 0.4em 0.6em;
+                border-radius: 0.1em;
+            }
+
+            canvas {
+                position: absolute;
+                top: 0;
+                left: 0;
+            }
+
+
+        </style>
+    </head>
+
+
+
+    <body>
+        hello word!
+
+        <div id="info">
+            <span class="title">テンプレテキスト scene</span><br/>
+            <span class="links">
+            
+            <!-- リンクのhtmlタグ "リンク先のURL">アンカーテキスト(左で書いたリンク先のURLがページ上で表示されるとき、このアンカーテキストが代わりに表示される) -->
+            <a href="https://github.com/google-ar/three.ar.js">three.ar.jsのサイト</a> -
+            <a href="https://developers.google.com/ar/develop/web/getting-started#examples">例</a>
+            </span>
+        </div>
+
+
+        <script src="../third_party/three.js/three.js"></script>
+        <script src="../third_party/three.js/VRControls.js"></script>
+        <script src="../dist/three.ar.js"></script>
+
+
+
+
+        <!-- JavaScript -->
+        <script>
+
+                var vrDisplay, vrControls, arView;
+                var canvas, camera, scene, renderer;
+                var BOX_DISTANCE = 1.5;
+                var BOX_SIZE = 0.25;
+                var BOX_QUANTITY = 6;
+                var boxesAdded = false;
 
 
 
 
 
-    </script>
+
+                //アプリケーション開始
+
+                //THREE.ARUtils.getARDisplayを使用してARアプリに使用できるディスプレイを取得
+                /*内部的にはWebVR APIのnavigator.getVRDisplaysを使用してVRディスプレイを取得した後で、
+                ディスプレイ名に'tango'または'arkit'が含まれていたらARディスプレイとみなす*/
+                THREE.ARUtils.getARDisplay().then(function (display)
+                {
+
+                    if (display)    //ARディスプレイが取得できた場合 → ARアプリを実行可能だと判断
+                    {   
+                    /*
+                        vrFrameData = new VRFrameData();    //各オブジェクト準備(VRFrameDataは後ほど端末の位置や向きを取得する際に使用)
+                        vrDisplay = display;                //各オブジェクト準備
+
+                        init(); //init関数呼び出し(アプリの初期化)
+
+                    }
+                    else          //ARディスプレイが取得無かった場合(ARCode/ARKit非対応のブラウザで開いた場合)
+                    {*/
+                        THREE.ARUtils.displayUnsupportedMessage();      //画面に警告を表示して終了
+                    }
+                });
 
 
-</body>
+
+
+
+        </script>
+    </body>
 </html>
+
+
+
